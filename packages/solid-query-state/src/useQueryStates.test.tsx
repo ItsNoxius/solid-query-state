@@ -1,8 +1,14 @@
 import { render } from "@solidjs/testing-library";
 import { describe, expect, it } from "vitest";
-import { QueryStateAdapter } from "./adapters/solid";
-import { createQueryStates } from "./useQueryStates";
-import { parseAsFloat, parseAsInteger, parseAsString } from "./parsers";
+import {
+    QueryStateAdapter,
+    createQueryStates,
+    parseAsFloat,
+    parseAsInteger,
+    parseAsString,
+    parseAsArrayOf,
+    debounce,
+} from "solid-query-state";
 
 describe("createQueryStates", () => {
     it("reads initial values from search params", () => {
@@ -228,7 +234,6 @@ describe("createQueryStates", () => {
     });
 
     it("supports limitUrlUpdates debounce option", async () => {
-        const { debounce } = await import("./index");
         window.history.replaceState(null, "", "?x=1");
         const parsers = {
             x: parseAsInteger.withDefault(0),
@@ -260,7 +265,6 @@ describe("createQueryStates", () => {
     });
 
     it("supports parseAsArrayOf in createQueryStates", async () => {
-        const { parseAsArrayOf } = await import("./parsers");
         window.history.replaceState(null, "", "?tags=a,b,c");
         const parsers = {
             tags: parseAsArrayOf(parseAsString),

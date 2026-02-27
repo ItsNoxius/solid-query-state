@@ -24,7 +24,7 @@
         "build": "tsup",
         "prepublishOnly": "pnpm run build",
         "test": "vitest",
-        "test:run": "vitest run",
+        "test:run": "pnpm run build && vitest run",
         "test:coverage": "vitest run --coverage",
         "typecheck": "tsc --noEmit",
         "prepack": "bash scripts/prepack.sh"

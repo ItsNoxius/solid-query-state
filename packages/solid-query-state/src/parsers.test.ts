@@ -13,8 +13,10 @@ import {
     parseAsStringEnum,
     parseAsStringLiteral,
     parseAsTimestamp,
-} from "./parsers";
-import { isParserBijective, testParseThenSerialize, testSerializeThenParse } from "./testing";
+    isParserBijective,
+    testParseThenSerialize,
+    testSerializeThenParse,
+} from "solid-query-state";
 
 describe("parsers", () => {
     it("parseAsString", () => {

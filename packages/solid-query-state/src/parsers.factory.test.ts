@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createParser, createMultiParser } from "./parsers";
+import { createParser, createMultiParser } from "solid-query-state";
 
 describe("createParser", () => {
     it("creates parser with parse and serialize", () => {

@@ -11,7 +11,7 @@ import {
     QueryStateAdapter,
     debounce,
     throttle,
-} from "./index";
+} from "solid-query-state";
 
 describe("solid-query-state", () => {
     it("exports createQueryState", () => {

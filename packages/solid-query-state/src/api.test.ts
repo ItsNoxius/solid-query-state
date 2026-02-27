@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as pkg from "./index";
+import * as pkg from "solid-query-state";
 
 describe("API exports", () => {
     it("exports createQueryState", () => {

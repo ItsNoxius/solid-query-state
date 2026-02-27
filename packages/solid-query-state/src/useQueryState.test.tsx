@@ -1,8 +1,12 @@
 import { render } from "@solidjs/testing-library";
 import { describe, expect, it } from "vitest";
-import { QueryStateAdapter } from "./adapters/solid";
-import { createQueryState } from "./useQueryState";
-import { parseAsInteger, parseAsString } from "./parsers";
+import {
+    QueryStateAdapter,
+    createQueryState,
+    parseAsInteger,
+    parseAsString,
+    parseAsArrayOf,
+} from "solid-query-state";
 
 describe("createQueryState", () => {
     it("reads initial value from search params", () => {
@@ -179,7 +183,6 @@ describe("createQueryState", () => {
     });
 
     it("supports parseAsArrayOf", async () => {
-        const { parseAsArrayOf } = await import("./parsers");
         const arrayParser = parseAsArrayOf(parseAsInteger);
         window.history.replaceState(null, "", "?tags=1,2,3");
         const Consumer = () => {
