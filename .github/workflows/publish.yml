@@ -1,0 +1,39 @@
+name: Publish
+
+on:
+    push:
+        tags:
+            - "v*"
+
+permissions:
+    contents: read
+    id-token: write
+
+jobs:
+    publish:
+        name: Publish to npm
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 10
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "pnpm"
+                  registry-url: "https://registry.npmjs.org"
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Set package version from tag
+              run: |
+                  VERSION=${GITHUB_REF#refs/tags/v}
+                  pnpm --filter solid-query-state pkg set version "$VERSION"
+
+            - name: Publish to npm
+              working-directory: packages/solid-query-state
+              run: npm publish --access public
