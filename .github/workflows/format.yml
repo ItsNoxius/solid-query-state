@@ -1,11 +1,8 @@
 name: Format
 
 on:
-    push:
-        tags:
-            - "v*"
-    release:
-        types: [published]
+    pull_request:
+        branches: [main, master]
 
 jobs:
     format-check:
