@@ -3,13 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter solid-js-nuqs-variant run dev",
-    "build": "pnpm --filter solid-js-nuqs-variant run build",
-    "preview": "pnpm --filter solid-js-nuqs-variant run preview",
-    "test": "pnpm -r run test:run",
-    "test:run": "pnpm -r run test:run"
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "preview": "turbo preview",
+    "test": "turbo run test:run",
+    "test:run": "turbo run test:run"
   },
   "devDependencies": {
+    "turbo": "^2.3.0",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "pnpm@10.29.3"
 }
