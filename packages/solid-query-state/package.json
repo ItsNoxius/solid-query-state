@@ -6,7 +6,8 @@
         "url": "https://github.com/ItsNoxius/solid-query-state.git"
     },
     "files": [
-        "dist"
+        "dist",
+        "README.md"
     ],
     "type": "module",
     "main": "./dist/index.js",
@@ -25,7 +26,8 @@
         "test": "vitest",
         "test:run": "vitest run",
         "test:coverage": "vitest run --coverage",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "prepack": "bash scripts/prepack.sh"
     },
     "devDependencies": {
         "@solidjs/testing-library": "^0.8.10",
