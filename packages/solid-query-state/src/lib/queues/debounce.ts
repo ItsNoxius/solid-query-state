@@ -75,9 +75,7 @@ export class DebounceController {
         adapter: UpdateQueueAdapterContext,
         processUrlSearchParams?: (search: URLSearchParams) => URLSearchParams,
     ): Promise<URLSearchParams> {
-        const getSnapshot =
-            adapter.getSearchParamsSnapshot ??
-            getSearchParamsSnapshotFromLocation;
+        const getSnapshot = adapter.getSearchParamsSnapshot ?? getSearchParamsSnapshotFromLocation;
         if (!Number.isFinite(timeMs)) {
             return Promise.resolve(getSnapshot());
         }
@@ -91,14 +89,10 @@ export class DebounceController {
                 }),
             );
         }
-        return this.queues
-            .get(key)!
-            .push(update, timeMs, adapter, processUrlSearchParams);
+        return this.queues.get(key)!.push(update, timeMs, adapter, processUrlSearchParams);
     }
 
-    abort(
-        key: string,
-    ): (p: Promise<URLSearchParams>) => Promise<URLSearchParams> {
+    abort(key: string): (p: Promise<URLSearchParams>) => Promise<URLSearchParams> {
         const queue = this.queues.get(key);
         if (!queue) return (p) => p;
         this.queues.delete(key);

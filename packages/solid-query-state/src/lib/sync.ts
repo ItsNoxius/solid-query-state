@@ -6,5 +6,4 @@ export type CrossHookSyncPayload = {
     query: Query | null;
 };
 
-export const syncEmitter =
-    createEmitter<Record<string, CrossHookSyncPayload>>();
+export const syncEmitter = createEmitter<Record<string, CrossHookSyncPayload>>();

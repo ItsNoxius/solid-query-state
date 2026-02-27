@@ -19,9 +19,7 @@ export type UpdateQueuePushArgs = {
 };
 
 export function getSearchParamsSnapshotFromLocation(): URLSearchParams {
-    return new URLSearchParams(
-        typeof location !== "undefined" ? location.search : "",
-    );
+    return new URLSearchParams(typeof location !== "undefined" ? location.search : "");
 }
 
 export class ThrottledQueue {
@@ -61,10 +59,7 @@ export class ThrottledQueue {
     getPendingPromise({
         getSearchParamsSnapshot = getSearchParamsSnapshotFromLocation,
     }: UpdateQueueAdapterContext): Promise<URLSearchParams> {
-        return (
-            this.resolvers?.promise ??
-            Promise.resolve(getSearchParamsSnapshot())
-        );
+        return this.resolvers?.promise ?? Promise.resolve(getSearchParamsSnapshot());
     }
 
     flush(
@@ -89,8 +84,7 @@ export class ThrottledQueue {
             const [search, err] = this.applyPendingUpdates(
                 {
                     ...adapter,
-                    autoResetQueueOnUpdate:
-                        adapter.autoResetQueueOnUpdate ?? true,
+                    autoResetQueueOnUpdate: adapter.autoResetQueueOnUpdate ?? true,
                     getSearchParamsSnapshot,
                 },
                 processUrlSearchParams,
@@ -108,8 +102,7 @@ export class ThrottledQueue {
             const now = performance.now();
             const timeSinceLastFlush = now - this.lastFlushedAt;
             const timeMs = this.timeMs;
-            const flushInMs =
-                rateLimitFactor * Math.max(0, timeMs - timeSinceLastFlush);
+            const flushInMs = rateLimitFactor * Math.max(0, timeMs - timeSinceLastFlush);
             if (flushInMs === 0) {
                 flushNow();
             } else {

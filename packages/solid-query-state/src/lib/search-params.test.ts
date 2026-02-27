@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-    compareQuery,
-    isAbsentFromUrl,
-    write,
-} from "./search-params";
+import { compareQuery, isAbsentFromUrl, write } from "./search-params";
 
 describe("isAbsentFromUrl", () => {
     it("returns true for null", () => {

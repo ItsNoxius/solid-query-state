@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-    applyChange,
-    filterSearchParams,
-} from "./key-isolation";
+import { applyChange, filterSearchParams } from "./key-isolation";
 
 describe("filterSearchParams", () => {
     it("returns all params when keys is empty", () => {

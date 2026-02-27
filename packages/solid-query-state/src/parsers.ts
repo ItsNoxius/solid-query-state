@@ -21,10 +21,7 @@ export type GenericParser<T> = SingleParser<T> | MultiParser<T>;
 
 export type SingleParserBuilder<T> = Required<SingleParser<T>> &
     Options & {
-        withOptions(
-            this: SingleParserBuilder<T>,
-            options: Options,
-        ): SingleParserBuilder<T>;
+        withOptions(this: SingleParserBuilder<T>, options: Options): SingleParserBuilder<T>;
         withDefault(
             this: SingleParserBuilder<T>,
             defaultValue: NonNullable<T>,
@@ -36,10 +33,7 @@ export type SingleParserBuilder<T> = Required<SingleParser<T>> &
 
 export type MultiParserBuilder<T> = Required<MultiParser<T>> &
     Options & {
-        withOptions(
-            this: MultiParserBuilder<T>,
-            options: Options,
-        ): MultiParserBuilder<T>;
+        withOptions(this: MultiParserBuilder<T>, options: Options): MultiParserBuilder<T>;
         withDefault(
             this: MultiParserBuilder<T>,
             defaultValue: NonNullable<T>,
@@ -49,9 +43,7 @@ export type MultiParserBuilder<T> = Required<MultiParser<T>> &
         parseServerSide(value: string | string[] | undefined): T | null;
     };
 
-export type GenericParserBuilder<T> =
-    | SingleParserBuilder<T>
-    | MultiParserBuilder<T>;
+export type GenericParserBuilder<T> = SingleParserBuilder<T> | MultiParserBuilder<T>;
 
 export function createParser<T>(
     parser: Require<SingleParser<T>, "parse" | "serialize">,
@@ -98,10 +90,7 @@ export function createMultiParser<T>(
 ): MultiParserBuilder<T> {
     function parseServerSideNullable(value: string | string[] | undefined) {
         if (typeof value === "undefined") return null;
-        return safeParseArray(
-            parser.parse,
-            Array.isArray(value) ? value : [value],
-        );
+        return safeParseArray(parser.parse, Array.isArray(value) ? value : [value]);
     }
 
     return {
@@ -248,22 +237,14 @@ export function parseAsArrayOf<ItemType>(
             return query
                 .split(separator)
                 .map((item) =>
-                    safeParse(
-                        itemParser.parse,
-                        item.replaceAll(encodedSeparator, separator),
-                    ),
+                    safeParse(itemParser.parse, item.replaceAll(encodedSeparator, separator)),
                 )
-                .filter(
-                    (value): value is ItemType =>
-                        value !== null && value !== undefined,
-                );
+                .filter((value): value is ItemType => value !== null && value !== undefined);
         },
         serialize: (values) =>
             values
                 .map((value) => {
-                    const str = itemParser.serialize
-                        ? itemParser.serialize(value)
-                        : String(value);
+                    const str = itemParser.serialize ? itemParser.serialize(value) : String(value);
                     return str.replaceAll(separator, encodedSeparator);
                 })
                 .join(separator),
@@ -282,9 +263,7 @@ export type inferParserType<Input> =
             : Value | null
         : Input extends Record<string, GenericParserBuilder<unknown>>
           ? {
-                [K in keyof Input]: Input[K] extends GenericParserBuilder<
-                    infer V
-                >
+                [K in keyof Input]: Input[K] extends GenericParserBuilder<infer V>
                     ? Input[K] extends { defaultValue: NonNullable<V> }
                         ? NonNullable<V>
                         : V | null

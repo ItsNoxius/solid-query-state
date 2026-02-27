@@ -1,16 +1,7 @@
-import {
-    createEffect,
-    createMemo,
-    createSignal,
-    onCleanup,
-    type JSX,
-} from "solid-js";
+import { createEffect, createMemo, createSignal, onCleanup, type JSX } from "solid-js";
 import { resetQueues } from "../lib/queues/reset";
 import { renderQueryString } from "../lib/url-encoding";
-import {
-    createAdapterProvider,
-    setGlobalAdapterValue,
-} from "./lib/context";
+import { createAdapterProvider, setGlobalAdapterValue } from "./lib/context";
 import type { AdapterInterface, AdapterOptions } from "./lib/defs";
 
 export type UrlUpdateEvent = {
@@ -67,19 +58,14 @@ export type TestingAdapterProps = {
     hasMemory?: boolean;
 
     defaultOptions?: Partial<
-        Pick<
-            import("../defs").Options,
-            "scroll" | "clearOnDefault" | "limitUrlUpdates" | "shallow"
-        >
+        Pick<import("../defs").Options, "scroll" | "clearOnDefault" | "limitUrlUpdates" | "shallow">
     >;
     processUrlSearchParams?: (search: URLSearchParams) => URLSearchParams;
 
     children: JSX.Element;
 };
 
-function renderInitialSearchParams(
-    searchParams: TestingAdapterProps["searchParams"],
-): string {
+function renderInitialSearchParams(searchParams: TestingAdapterProps["searchParams"]): string {
     if (!searchParams) {
         return "";
     }
@@ -122,9 +108,7 @@ export function SolidTestingAdapter(props: TestingAdapterProps): JSX.Element {
         resetQueues();
     }
 
-    const [locationSearch, setLocationSearch] = createSignal(
-        renderedInitialSearchParams(),
-    );
+    const [locationSearch, setLocationSearch] = createSignal(renderedInitialSearchParams());
 
     createEffect(() => {
         if (!hasMemory) return;
@@ -132,9 +116,7 @@ export function SolidTestingAdapter(props: TestingAdapterProps): JSX.Element {
         setLocationSearch(search.toString());
     });
 
-    const searchParams = createMemo(
-        () => new URLSearchParams(locationSearch()),
-    );
+    const searchParams = createMemo(() => new URLSearchParams(locationSearch()));
 
     const updateUrl = (search: URLSearchParams, options: Required<AdapterOptions>) => {
         const queryString = renderQueryString(search);
@@ -149,8 +131,7 @@ export function SolidTestingAdapter(props: TestingAdapterProps): JSX.Element {
         });
     };
 
-    const getSearchParamsSnapshot = () =>
-        new URLSearchParams(locationSearch());
+    const getSearchParamsSnapshot = () => new URLSearchParams(locationSearch());
 
     const useAdapter = (): AdapterInterface => ({
         searchParams,
@@ -171,10 +152,7 @@ export function SolidTestingAdapter(props: TestingAdapterProps): JSX.Element {
 
     const Provider = createAdapterProvider(useAdapter);
     return (
-        <Provider
-            defaultOptions={defaultOptions}
-            processUrlSearchParams={processUrlSearchParams}
-        >
+        <Provider defaultOptions={defaultOptions} processUrlSearchParams={processUrlSearchParams}>
             {children}
         </Provider>
     );
@@ -193,16 +171,8 @@ export function SolidTestingAdapter(props: TestingAdapterProps): JSX.Element {
  * })
  * ```
  */
-export function withSolidTestingAdapter(
-    adapterProps: Omit<TestingAdapterProps, "children"> = {},
-) {
-    return function SolidTestingAdapterWrapper(props: {
-        children: JSX.Element;
-    }): JSX.Element {
-        return (
-            <SolidTestingAdapter {...adapterProps}>
-                {props.children}
-            </SolidTestingAdapter>
-        );
+export function withSolidTestingAdapter(adapterProps: Omit<TestingAdapterProps, "children"> = {}) {
+    return function SolidTestingAdapterWrapper(props: { children: JSX.Element }): JSX.Element {
+        return <SolidTestingAdapter {...adapterProps}>{props.children}</SolidTestingAdapter>;
     };
 }

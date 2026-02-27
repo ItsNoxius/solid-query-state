@@ -11,15 +11,15 @@ import { TestSuite } from "./sections/TestSuite";
 
 const root = document.getElementById("root");
 render(
-  () => (
-    <Router root={App}>
-      <Route path="/" component={Hero} />
-      <Route path="/installation" component={Installation} />
-      <Route path="/usage" component={Usage} />
-      <Route path="/playground" component={Playground} />
-      <Route path="/playground/:demo" component={Playground} />
-      <Route path="/tests" component={TestSuite} />
-    </Router>
-  ),
-  root!
+    () => (
+        <Router root={App}>
+            <Route path="/" component={Hero} />
+            <Route path="/installation" component={Installation} />
+            <Route path="/usage" component={Usage} />
+            <Route path="/playground" component={Playground} />
+            <Route path="/playground/:demo" component={Playground} />
+            <Route path="/tests" component={TestSuite} />
+        </Router>
+    ),
+    root!,
 );

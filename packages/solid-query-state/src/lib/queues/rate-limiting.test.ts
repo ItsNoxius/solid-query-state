@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-    defaultRateLimit,
-    debounce,
-    throttle,
-} from "./rate-limiting";
+import { defaultRateLimit, debounce, throttle } from "./rate-limiting";
 
 describe("rate-limiting", () => {
     it("defaultRateLimit has throttle method and 50ms", () => {

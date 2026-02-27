@@ -1,9 +1,5 @@
 import { compareQuery } from "./lib/search-params";
-import type {
-    GenericParserBuilder,
-    MultiParserBuilder,
-    SingleParserBuilder,
-} from "./parsers";
+import type { GenericParserBuilder, MultiParserBuilder, SingleParserBuilder } from "./parsers";
 
 export function isParserBijective<T>(
     parser: SingleParserBuilder<T>,
@@ -58,12 +54,8 @@ Received: '${serializedOutput}'`,
     }
     const parsed =
         parser.type === "multi"
-            ? (parser as MultiParserBuilder<T>).parse(
-                  serialized as Array<string>,
-              )
-            : (parser as SingleParserBuilder<T>).parse(
-                  serialized as string,
-              );
+            ? (parser as MultiParserBuilder<T>).parse(serialized as Array<string>)
+            : (parser as SingleParserBuilder<T>).parse(serialized as string);
     if (parsed === null || !parser.eq!(parsed, input)) {
         throw new Error(
             `[solid-query-state] parser.parse does not match expected input value
@@ -74,14 +66,8 @@ Received: ${parsed}`,
     return true;
 }
 
-export function testSerializeThenParse<T>(
-    parser: SingleParserBuilder<T>,
-    input: T,
-): boolean;
-export function testSerializeThenParse<T>(
-    parser: MultiParserBuilder<T>,
-    input: T,
-): boolean;
+export function testSerializeThenParse<T>(parser: SingleParserBuilder<T>, input: T): boolean;
+export function testSerializeThenParse<T>(parser: MultiParserBuilder<T>, input: T): boolean;
 
 /**
  * Test that a parser is bijective (serialize then parse gives back the same value).
@@ -93,10 +79,7 @@ export function testSerializeThenParse<T>(
  * @param input An input value to test against
  * @returns `true` if the test passes, otherwise it will throw.
  */
-export function testSerializeThenParse<T>(
-    parser: GenericParserBuilder<T>,
-    input: T,
-): boolean {
+export function testSerializeThenParse<T>(parser: GenericParserBuilder<T>, input: T): boolean {
     const serialized =
         parser.type === "multi"
             ? (parser as MultiParserBuilder<T>).serialize(input)
@@ -123,10 +106,7 @@ Serialized as: '${serialized}'`,
     return true;
 }
 
-export function testParseThenSerialize<T>(
-    parser: SingleParserBuilder<T>,
-    input: string,
-): boolean;
+export function testParseThenSerialize<T>(parser: SingleParserBuilder<T>, input: string): boolean;
 export function testParseThenSerialize<T>(
     parser: MultiParserBuilder<T>,
     input: Array<string>,

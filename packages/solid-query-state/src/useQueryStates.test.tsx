@@ -2,11 +2,7 @@ import { render } from "@solidjs/testing-library";
 import { describe, expect, it } from "vitest";
 import { QueryStateAdapter } from "./adapters/solid";
 import { createQueryStates } from "./useQueryStates";
-import {
-    parseAsFloat,
-    parseAsInteger,
-    parseAsString,
-} from "./parsers";
+import { parseAsFloat, parseAsInteger, parseAsString } from "./parsers";
 
 describe("createQueryStates", () => {
     it("reads initial values from search params", () => {
@@ -23,13 +19,11 @@ describe("createQueryStates", () => {
                 </span>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         expect(getByTestId("value").textContent).toBe("foo-42");
     });
 
@@ -47,13 +41,11 @@ describe("createQueryStates", () => {
                 </span>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         expect(getByTestId("value").textContent).toBe("n-n");
     });
 
@@ -70,13 +62,11 @@ describe("createQueryStates", () => {
                 </span>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         expect(getByTestId("value").textContent).toBe("45.18-5.72");
     });
 
@@ -89,21 +79,16 @@ describe("createQueryStates", () => {
         const Consumer = () => {
             const [state, setState] = createQueryStates(parsers);
             return (
-                <button
-                    data-testid="btn"
-                    onClick={() => setState({ a: "updated", b: 99 })}
-                >
+                <button data-testid="btn" onClick={() => setState({ a: "updated", b: 99 })}>
                     {state().a}-{state().b}
                 </button>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         expect(getByTestId("btn").textContent).toBe("init-1");
         getByTestId("btn").click();
         await new Promise((r) => setTimeout(r, 60)); // Wait for throttle
@@ -130,13 +115,11 @@ describe("createQueryStates", () => {
                 </button>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         getByTestId("btn").click();
         await new Promise((r) => setTimeout(r, 60)); // Wait for throttle
         expect(window.location.search).toContain("a=first");
@@ -163,13 +146,11 @@ describe("createQueryStates", () => {
                 </button>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         expect(getByTestId("btn").textContent).toBe("10");
         getByTestId("btn").click();
         await new Promise((r) => setTimeout(r, 60)); // Wait for throttle
@@ -186,21 +167,16 @@ describe("createQueryStates", () => {
         const Consumer = () => {
             const [state, setState] = createQueryStates(parsers);
             return (
-                <button
-                    data-testid="btn"
-                    onClick={() => setState({ b: "updated" })}
-                >
+                <button data-testid="btn" onClick={() => setState({ b: "updated" })}>
                     {state().a}-{state().b}-{state().c}
                 </button>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         getByTestId("btn").click();
         await new Promise((r) => setTimeout(r, 60)); // Wait for throttle
         expect(window.location.search).toContain("a=1");
@@ -219,13 +195,11 @@ describe("createQueryStates", () => {
             });
             return <span data-testid="value">{state().longKey}</span>;
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         expect(getByTestId("value").textContent).toBe("value");
     });
 
@@ -238,21 +212,16 @@ describe("createQueryStates", () => {
         const Consumer = () => {
             const [state, setState] = createQueryStates(parsers);
             return (
-                <button
-                    data-testid="btn"
-                    onClick={() => setState({ a: null })}
-                >
+                <button data-testid="btn" onClick={() => setState({ a: null })}>
                     {state().a}-{state().b}
                 </button>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         getByTestId("btn").click();
         await new Promise((r) => setTimeout(r, 60)); // Wait for throttle
         expect(window.location.search).not.toContain("a=");
@@ -280,13 +249,11 @@ describe("createQueryStates", () => {
                 </button>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         getByTestId("btn").click();
         await new Promise((r) => setTimeout(r, 50));
         expect(window.location.search).toContain("x=3");
@@ -301,21 +268,16 @@ describe("createQueryStates", () => {
         const Consumer = () => {
             const [state, setState] = createQueryStates(parsers);
             return (
-                <button
-                    data-testid="btn"
-                    onClick={() => setState({ tags: ["x", "y"] })}
-                >
+                <button data-testid="btn" onClick={() => setState({ tags: ["x", "y"] })}>
                     {state().tags?.join("-") ?? "null"}
                 </button>
             );
         };
-        const { getByTestId } = render(
-            () => (
-                <QueryStateAdapter>
-                    <Consumer />
-                </QueryStateAdapter>
-            ),
-        );
+        const { getByTestId } = render(() => (
+            <QueryStateAdapter>
+                <Consumer />
+            </QueryStateAdapter>
+        ));
         expect(getByTestId("btn").textContent).toBe("a-b-c");
         getByTestId("btn").click();
         await new Promise((r) => setTimeout(r, 60));

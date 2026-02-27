@@ -1,9 +1,6 @@
 import { render } from "@solidjs/testing-library";
 import { describe, expect, it } from "vitest";
-import {
-    SolidTestingAdapter,
-    withSolidTestingAdapter,
-} from "./testing";
+import { SolidTestingAdapter, withSolidTestingAdapter } from "./testing";
 
 describe("SolidTestingAdapter", () => {
     it("renders children without crashing", () => {

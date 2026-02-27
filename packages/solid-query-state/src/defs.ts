@@ -49,6 +49,4 @@ export type Nullable<T> = {
     [K in keyof T]: T[K] | null;
 } & {};
 
-export type UrlKeys<T extends Record<string, string>> = Partial<
-    Record<keyof T, string>
->;
+export type UrlKeys<T extends Record<string, string>> = Partial<Record<keyof T, string>>;

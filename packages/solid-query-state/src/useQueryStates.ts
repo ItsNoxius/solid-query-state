@@ -7,10 +7,7 @@ import {
 import type { Nullable, Options, UrlKeys } from "./defs";
 import { debounceController } from "./lib/queues/debounce";
 import { defaultRateLimit } from "./lib/queues/rate-limiting";
-import {
-    globalThrottleQueue,
-    type UpdateQueuePushArgs,
-} from "./lib/queues/throttle";
+import { globalThrottleQueue, type UpdateQueuePushArgs } from "./lib/queues/throttle";
 import { safeParse } from "./lib/safe-parse";
 import { safeParseArray } from "./lib/safe-parse";
 import { isAbsentFromUrl } from "./lib/search-params";
@@ -47,10 +44,7 @@ export type SetValues<T extends UseQueryStatesKeysMap> = (
     options?: Options,
 ) => void;
 
-export type UseQueryStatesReturn<T extends UseQueryStatesKeysMap> = [
-    () => Values<T>,
-    SetValues<T>,
-];
+export type UseQueryStatesReturn<T extends UseQueryStatesKeysMap> = [() => Values<T>, SetValues<T>];
 
 function parseMap<T extends UseQueryStatesKeysMap>(
     keyMap: T,
@@ -80,16 +74,12 @@ function parseMap<T extends UseQueryStatesKeysMap>(
                       : []
                 : query;
         const value = isAbsentFromUrl(
-            Array.isArray(normalizedQuery)
-                ? normalizedQuery
-                : (normalizedQuery ?? null),
+            Array.isArray(normalizedQuery) ? normalizedQuery : (normalizedQuery ?? null),
         )
             ? null
             : parser.type === "multi"
               ? safeParseArray(
-                    parser.parse as unknown as (
-                        v: ReadonlyArray<string>,
-                    ) => unknown,
+                    parser.parse as unknown as (v: ReadonlyArray<string>) => unknown,
                     normalizedQuery as string[],
                 )
               : safeParse(
@@ -97,8 +87,7 @@ function parseMap<T extends UseQueryStatesKeysMap>(
                     (normalizedQuery as string) ?? "",
                 );
 
-        state[stateKey as keyof T] = (value ??
-            null) as NullableValues<T>[keyof T];
+        state[stateKey as keyof T] = (value ?? null) as NullableValues<T>[keyof T];
     }
     return state;
 }
@@ -108,10 +97,7 @@ function applyDefaultValues<T extends UseQueryStatesKeysMap>(
     defaults: Partial<Values<T>>,
 ): Values<T> {
     return Object.fromEntries(
-        Object.keys(state).map((key) => [
-            key,
-            state[key] ?? defaults[key] ?? null,
-        ]),
+        Object.keys(state).map((key) => [key, state[key] ?? defaults[key] ?? null]),
     ) as Values<T>;
 }
 
@@ -147,10 +133,7 @@ export function createQueryStates<T extends UseQueryStatesKeysMap>(
     ) as Partial<Values<T>>;
 
     function getQueuedQuery(key: string) {
-        return (
-            debounceController.getQueuedQuery(key) ??
-            globalThrottleQueue.getQueuedQuery(key)
-        );
+        return debounceController.getQueuedQuery(key) ?? globalThrottleQueue.getQueuedQuery(key);
     }
 
     const [internalState, setInternalState] = createSignal<NullableValues<T>>(
@@ -165,22 +148,14 @@ export function createQueryStates<T extends UseQueryStatesKeysMap>(
 
     createEffect(() => {
         const searchParams = adapter.searchParams();
-        const state = parseMap(
-            keyMap,
-            resolvedUrlKeys,
-            searchParams,
-            getQueuedQuery,
-        );
+        const state = parseMap(keyMap, resolvedUrlKeys, searchParams, getQueuedQuery);
         setInternalState(() => state);
     });
 
     createEffect(() => {
         const handlers: Record<
             string,
-            (payload: {
-                state: unknown;
-                query: string | string[] | null;
-            }) => void
+            (payload: { state: unknown; query: string | string[] | null }) => void
         > = {};
         for (const stateKey of Object.keys(keyMap)) {
             const parser = keyMap[stateKey] as KeyMapValue;
@@ -188,8 +163,7 @@ export function createQueryStates<T extends UseQueryStatesKeysMap>(
                 const defaultValue = parser.defaultValue ?? null;
                 const nextValue = state ?? defaultValue ?? null;
                 setInternalState((current) => {
-                    const currentValue =
-                        current[stateKey] ?? defaultValue ?? null;
+                    const currentValue = current[stateKey] ?? defaultValue ?? null;
                     if (Object.is(currentValue, nextValue)) return current;
                     return { ...current, [stateKey]: nextValue };
                 });
@@ -216,9 +190,7 @@ export function createQueryStates<T extends UseQueryStatesKeysMap>(
 
         const newState: Partial<NullableValues<T>> =
             typeof stateUpdater === "function"
-                ? (stateUpdater(
-                      applyDefaultValues(internalState(), defaultValues),
-                  ) ?? nullMap)
+                ? (stateUpdater(applyDefaultValues(internalState(), defaultValues)) ?? nullMap)
                 : (stateUpdater ?? nullMap);
 
         for (const [stateKey, value] of Object.entries(newState)) {
@@ -232,15 +204,10 @@ export function createQueryStates<T extends UseQueryStatesKeysMap>(
                     clearOnDefault) &&
                 value !== null &&
                 parser.defaultValue !== undefined &&
-                (parser.eq ?? ((a: unknown, b: unknown) => a === b))(
-                    value,
-                    parser.defaultValue,
-                );
+                (parser.eq ?? ((a: unknown, b: unknown) => a === b))(value, parser.defaultValue);
 
             const query =
-                shouldClear || value === null
-                    ? null
-                    : (parser.serialize ?? String)(value);
+                shouldClear || value === null ? null : (parser.serialize ?? String)(value);
 
             syncEmitter.emit(urlKey, {
                 state: shouldClear ? null : value,
@@ -251,18 +218,9 @@ export function createQueryStates<T extends UseQueryStatesKeysMap>(
                 key: urlKey,
                 query: shouldClear ? null : query,
                 options: {
-                    history:
-                        callOptions.history ??
-                        (parser as Options).history ??
-                        history,
-                    shallow:
-                        callOptions.shallow ??
-                        (parser as Options).shallow ??
-                        shallow,
-                    scroll:
-                        callOptions.scroll ??
-                        (parser as Options).scroll ??
-                        scroll,
+                    history: callOptions.history ?? (parser as Options).history ?? history,
+                    shallow: callOptions.shallow ?? (parser as Options).shallow ?? shallow,
+                    scroll: callOptions.scroll ?? (parser as Options).scroll ?? scroll,
                 },
             };
 
@@ -287,17 +245,12 @@ export function createQueryStates<T extends UseQueryStatesKeysMap>(
             } else {
                 debounceController.abort(urlKey);
                 globalThrottleQueue.push(update, timeMs);
-                globalThrottleQueue.flush(
-                    adapter,
-                    processUrlSearchParams ?? undefined,
-                );
+                globalThrottleQueue.flush(adapter, processUrlSearchParams ?? undefined);
             }
         }
     };
 
-    const outputState = createMemo(() =>
-        applyDefaultValues(internalState(), defaultValues),
-    );
+    const outputState = createMemo(() => applyDefaultValues(internalState(), defaultValues));
 
     return [outputState, setState];
 }

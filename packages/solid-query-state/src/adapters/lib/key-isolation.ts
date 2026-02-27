@@ -9,13 +9,7 @@ export function applyChange(
         const hasChanged =
             keys.length === 0
                 ? true
-                : keys.some(
-                      (key) =>
-                          !compareQuery(
-                              oldValue.getAll(key),
-                              newValue.getAll(key),
-                          ),
-                  );
+                : keys.some((key) => !compareQuery(oldValue.getAll(key), newValue.getAll(key)));
         if (!hasChanged) return oldValue;
         return filterSearchParams(newValue, keys, copy);
     };

@@ -1,9 +1,6 @@
 import type { Options } from "./defs";
 import type { GenericParser } from "./parsers";
-import {
-    createQueryStates,
-    type UseQueryStatesKeysMap,
-} from "./useQueryStates";
+import { createQueryStates, type UseQueryStatesKeysMap } from "./useQueryStates";
 
 export type CreateQueryStateOptions<T> = GenericParser<T> & Options;
 
@@ -29,8 +26,7 @@ export function createQueryState<T>(
     key: string,
     options?: CreateQueryStateOptions<T> & { defaultValue?: T },
 ) {
-    const opts =
-        options ?? ({} as CreateQueryStateOptions<T> & { defaultValue?: T });
+    const opts = options ?? ({} as CreateQueryStateOptions<T> & { defaultValue?: T });
     const { parse, type, serialize, eq, defaultValue, ...hookOptions } = opts;
 
     const keyMap = {
@@ -54,9 +50,7 @@ export function createQueryState<T>(
             (old) => ({
                 [key]:
                     typeof stateUpdater === "function"
-                        ? (stateUpdater as (old: T | null) => T | null)(
-                              old[key] as T | null,
-                          )
+                        ? (stateUpdater as (old: T | null) => T | null)(old[key] as T | null)
                         : stateUpdater,
             }),
             callOptions,

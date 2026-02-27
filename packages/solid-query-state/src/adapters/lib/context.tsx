@@ -1,19 +1,10 @@
-import {
-    createContext,
-    useContext,
-    onCleanup,
-    type Component,
-    type JSX,
-} from "solid-js";
+import { createContext, useContext, onCleanup, type Component, type JSX } from "solid-js";
 import type { Options } from "../../defs";
 import type { AdapterInterface, UseAdapterHook } from "./defs";
 
 export type AdapterProps = {
     defaultOptions?: Partial<
-        Pick<
-            Options,
-            "scroll" | "clearOnDefault" | "limitUrlUpdates" | "shallow"
-        >
+        Pick<Options, "scroll" | "clearOnDefault" | "limitUrlUpdates" | "shallow">
     >;
     processUrlSearchParams?: (search: URLSearchParams) => URLSearchParams;
 };
@@ -36,16 +27,13 @@ const defaultContext: AdapterContextValue = {
     },
 };
 
-export const NuqsAdapterContext =
-    createContext<AdapterContextValue>(defaultContext);
+export const NuqsAdapterContext = createContext<AdapterContextValue>(defaultContext);
 
 /** Module-level fallback for HMR when context is lost during reload */
 let globalAdapterValue: AdapterContextValue | null = null;
 
 /** Called by QueryStateAdapter to set the adapter value before children run */
-export function setGlobalAdapterValue(
-    value: AdapterContextValue | null,
-): void {
+export function setGlobalAdapterValue(value: AdapterContextValue | null): void {
     if (value === null) {
         globalAdapterValue = null;
         return;
@@ -55,13 +43,8 @@ export function setGlobalAdapterValue(
     globalAdapterValue = marked;
 }
 
-function getAdapterValue(
-    value: AdapterContextValue | undefined,
-): AdapterContextValue | null {
-    if (
-        value &&
-        (value as AdapterContextValueWithMarker)[NUQS_ADAPTER_MARKER]
-    ) {
+function getAdapterValue(value: AdapterContextValue | undefined): AdapterContextValue | null {
+    if (value && (value as AdapterContextValueWithMarker)[NUQS_ADAPTER_MARKER]) {
         return value;
     }
     return globalAdapterValue;

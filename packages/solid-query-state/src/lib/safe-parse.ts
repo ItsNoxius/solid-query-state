@@ -1,7 +1,4 @@
-export function safeParse<T>(
-    parse: (value: string) => T | null,
-    value: string,
-): T | null {
+export function safeParse<T>(parse: (value: string) => T | null, value: string): T | null {
     try {
         return parse(value);
     } catch {

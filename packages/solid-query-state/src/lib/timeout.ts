@@ -1,8 +1,4 @@
-export function timeout(
-    callback: () => void,
-    ms: number,
-    signal: AbortSignal,
-): void {
+export function timeout(callback: () => void, ms: number, signal: AbortSignal): void {
     function onTick() {
         callback();
         signal.removeEventListener("abort", onAbort);

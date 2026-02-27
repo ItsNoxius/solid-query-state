@@ -14,11 +14,7 @@ import {
     parseAsStringLiteral,
     parseAsTimestamp,
 } from "./parsers";
-import {
-    isParserBijective,
-    testParseThenSerialize,
-    testSerializeThenParse,
-} from "./testing";
+import { isParserBijective, testParseThenSerialize, testSerializeThenParse } from "./testing";
 
 describe("parsers", () => {
     it("parseAsString", () => {
@@ -35,9 +31,7 @@ describe("parsers", () => {
         expect(parseAsInteger.serialize(3.14)).toBe("3");
         expect(isParserBijective(parseAsInteger, "3", 3)).toBe(true);
         expect(() => testParseThenSerialize(parseAsInteger, "3.14")).toThrow();
-        expect(() =>
-            testSerializeThenParse(parseAsInteger, 3.14),
-        ).toThrow();
+        expect(() => testSerializeThenParse(parseAsInteger, 3.14)).toThrow();
     });
 
     it("parseAsHex", () => {
@@ -48,9 +42,7 @@ describe("parsers", () => {
         expect(parseAsHex.serialize(0xa)).toBe("0a");
         for (let byte = 0; byte < 256; byte++) {
             const hexString = byte.toString(16).padStart(2, "0");
-            expect(
-                isParserBijective(parseAsHex, hexString, byte),
-            ).toBe(true);
+            expect(isParserBijective(parseAsHex, hexString, byte)).toBe(true);
         }
     });
 
@@ -61,9 +53,7 @@ describe("parsers", () => {
         expect(parseAsFloat.parse("3,14")).toBe(3);
         expect(parseAsFloat.serialize(3.14)).toBe("3.14");
         // https://0.30000000000000004.com/
-        expect(parseAsFloat.serialize(0.1 + 0.2)).toBe(
-            "0.30000000000000004",
-        );
+        expect(parseAsFloat.serialize(0.1 + 0.2)).toBe("0.30000000000000004");
         expect(isParserBijective(parseAsFloat, "3.14", 3.14)).toBe(true);
     });
 
@@ -102,19 +92,9 @@ describe("parsers", () => {
         expect(parseAsTimestamp.parse("")).toBeNull();
         expect(parseAsTimestamp.parse("0")).toStrictEqual(new Date(0));
         expect(testParseThenSerialize(parseAsTimestamp, "0")).toBe(true);
-        expect(
-            testSerializeThenParse(parseAsTimestamp, new Date(1234567890)),
-        ).toBe(true);
-        expect(
-            isParserBijective(parseAsTimestamp, "0", new Date(0)),
-        ).toBe(true);
-        expect(
-            isParserBijective(
-                parseAsTimestamp,
-                "1234567890",
-                new Date(1234567890),
-            ),
-        ).toBe(true);
+        expect(testSerializeThenParse(parseAsTimestamp, new Date(1234567890))).toBe(true);
+        expect(isParserBijective(parseAsTimestamp, "0", new Date(0))).toBe(true);
+        expect(isParserBijective(parseAsTimestamp, "1234567890", new Date(1234567890))).toBe(true);
     });
 
     it("parseAsIsoDateTime", () => {
@@ -123,17 +103,11 @@ describe("parsers", () => {
         const moment = "2020-01-01T00:00:00.000Z";
         const ref = new Date(moment);
         expect(parseAsIsoDateTime.parse(moment)).toStrictEqual(ref);
-        expect(
-            parseAsIsoDateTime.parse(moment.slice(0, 10)),
-        ).toStrictEqual(ref);
-        expect(
-            parseAsIsoDateTime.parse(moment.slice(0, 16) + "Z"),
-        ).toStrictEqual(ref);
+        expect(parseAsIsoDateTime.parse(moment.slice(0, 10))).toStrictEqual(ref);
+        expect(parseAsIsoDateTime.parse(moment.slice(0, 16) + "Z")).toStrictEqual(ref);
         expect(testParseThenSerialize(parseAsIsoDateTime, moment)).toBe(true);
         expect(testSerializeThenParse(parseAsIsoDateTime, ref)).toBe(true);
-        expect(
-            isParserBijective(parseAsIsoDateTime, moment, ref),
-        ).toBe(true);
+        expect(isParserBijective(parseAsIsoDateTime, moment, ref)).toBe(true);
     });
 
     it("parseAsIsoDate", () => {
@@ -210,9 +184,7 @@ describe("parsers", () => {
         expect(testParseThenSerialize(parser, "a,b")).toBe(true);
         expect(testSerializeThenParse(parser, ["a", "b"])).toBe(true);
         expect(isParserBijective(parser, "a,b", ["a", "b"])).toBe(true);
-        expect(() =>
-            isParserBijective(parser, "not-an-array", ["a", "b"]),
-        ).toThrow();
+        expect(() => isParserBijective(parser, "not-an-array", ["a", "b"])).toThrow();
     });
 
     it("parseAsArrayOf with custom separator", () => {
@@ -240,9 +212,7 @@ describe("parsers", () => {
     });
 
     it("merges options when chaining them", () => {
-        const p = parseAsString
-            .withOptions({ scroll: true })
-            .withOptions({ history: "push" });
+        const p = parseAsString.withOptions({ scroll: true }).withOptions({ history: "push" });
         expect(p.scroll).toBe(true);
         expect(p.history).toBe("push");
     });

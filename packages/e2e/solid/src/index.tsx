@@ -7,10 +7,10 @@ import { QueryStateAdapter } from "solid-query-state";
 const root = document.getElementById("root");
 
 render(
-  () => (
-    <QueryStateAdapter>
-      <App />
-    </QueryStateAdapter>
-  ),
-  root!
+    () => (
+        <QueryStateAdapter>
+            <App />
+        </QueryStateAdapter>
+    ),
+    root!,
 );
