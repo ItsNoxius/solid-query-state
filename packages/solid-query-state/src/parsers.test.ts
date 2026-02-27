@@ -215,6 +215,13 @@ describe("parsers", () => {
         ).toThrow();
     });
 
+    it("parseAsArrayOf with custom separator", () => {
+        const parser = parseAsArrayOf(parseAsString, "|");
+        expect(parser.parse("a|b|c")).toEqual(["a", "b", "c"]);
+        expect(parser.serialize(["x", "y"])).toBe("x|y");
+        expect(isParserBijective(parser, "a|b", ["a", "b"])).toBe(true);
+    });
+
     it("parseServerSide with default (#384)", () => {
         const p = parseAsString.withDefault("default");
         const searchParams = {

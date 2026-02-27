@@ -14,10 +14,12 @@
   },
   "scripts": {
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.10",
+    "@vitest/coverage-v8": "^4.0.18",
     "jsdom": "^28.1.0",
     "solid-js": "^1",
     "vite-plugin-solid": "^2.11.10",

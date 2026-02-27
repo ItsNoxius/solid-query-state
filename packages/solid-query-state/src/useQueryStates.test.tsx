@@ -257,4 +257,69 @@ describe("createQueryStates", () => {
         await new Promise((r) => setTimeout(r, 60)); // Wait for throttle
         expect(window.location.search).not.toContain("a=");
     });
+
+    it("supports limitUrlUpdates debounce option", async () => {
+        const { debounce } = await import("./index");
+        window.history.replaceState(null, "", "?x=1");
+        const parsers = {
+            x: parseAsInteger.withDefault(0),
+        };
+        const Consumer = () => {
+            const [state, setState] = createQueryStates(parsers, {
+                limitUrlUpdates: debounce(10),
+            });
+            return (
+                <button
+                    data-testid="btn"
+                    onClick={() => {
+                        setState({ x: 2 });
+                        setState({ x: 3 });
+                    }}
+                >
+                    {state().x}
+                </button>
+            );
+        };
+        const { getByTestId } = render(
+            () => (
+                <QueryStateAdapter>
+                    <Consumer />
+                </QueryStateAdapter>
+            ),
+        );
+        getByTestId("btn").click();
+        await new Promise((r) => setTimeout(r, 50));
+        expect(window.location.search).toContain("x=3");
+    });
+
+    it("supports parseAsArrayOf in createQueryStates", async () => {
+        const { parseAsArrayOf } = await import("./parsers");
+        window.history.replaceState(null, "", "?tags=a,b,c");
+        const parsers = {
+            tags: parseAsArrayOf(parseAsString),
+        };
+        const Consumer = () => {
+            const [state, setState] = createQueryStates(parsers);
+            return (
+                <button
+                    data-testid="btn"
+                    onClick={() => setState({ tags: ["x", "y"] })}
+                >
+                    {state().tags?.join("-") ?? "null"}
+                </button>
+            );
+        };
+        const { getByTestId } = render(
+            () => (
+                <QueryStateAdapter>
+                    <Consumer />
+                </QueryStateAdapter>
+            ),
+        );
+        expect(getByTestId("btn").textContent).toBe("a-b-c");
+        getByTestId("btn").click();
+        await new Promise((r) => setTimeout(r, 60));
+        expect(window.location.search).toMatch(/tags=/);
+        expect(decodeURIComponent(window.location.search)).toContain("tags=x,y");
+    });
 });
