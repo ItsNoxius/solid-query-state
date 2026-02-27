@@ -1,6 +1,10 @@
 {
     "name": "solid-query-state",
     "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ItsNoxius/solid-query-state.git"
+    },
     "type": "module",
     "main": "./src/index.ts",
     "module": "src/index.ts",
