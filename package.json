@@ -8,6 +8,7 @@
         "preview": "turbo preview",
         "test": "turbo run test:run",
         "test:run": "turbo run test:run",
+        "typecheck": "turbo run typecheck",
         "format": "oxfmt",
         "format:check": "oxfmt --check"
     },
