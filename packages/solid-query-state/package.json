@@ -5,8 +5,10 @@
         "type": "git",
         "url": "https://github.com/ItsNoxius/solid-query-state.git"
     },
+    "files": [
+        "dist"
+    ],
     "type": "module",
-    "files": ["dist"],
     "main": "./dist/index.js",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
