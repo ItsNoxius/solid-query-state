@@ -1,0 +1,7 @@
+dist
+node_modules
+*.local
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
